@@ -1,13 +1,17 @@
 from pathlib import Path
+import sentry_sdk
+from dotenv import load_dotenv
+
+from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv()
 
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-SECRET_KEY = 'django-insecure-j_89af+30&&4qm*8z9_(^zz8p4-ho8z_m6ylm0s$h!-p@on1_^'
+DEBUG = False
 
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['84.252.143.218', '127.0.0.1', 'localhost', 'qu-taski.hopto.org']
 
 
 # Application definition
@@ -36,6 +40,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
+sentry_sdk.init(
+    dsn="https://131dd7f8798f643947f71fdf9a02dcd3@o4506536804876288.ingest.sentry.io/4506536810840064",
+    integrations=[
+        DjangoIntegration(),
+    ],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+) 
 
 TEMPLATES = [
     {
@@ -100,13 +113,9 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+STATIC_URL = '/static_backend/'
 
-STATIC_URL = '/static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+STATIC_ROOT = BASE_DIR / 'static_backend'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
